@@ -13,3 +13,5 @@ feathersVenv/
 # IDE
 .vscode/
 .idea/
+src/best_attr_model.pth
+*.pth
