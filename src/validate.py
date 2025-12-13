@@ -7,19 +7,7 @@ import torch
 
 
 def validate(model, loader, device, criterion=None):
-    """
-    Validate the model with optional loss calculation.
-    
-    Args:
-        model: PyTorch model to validate
-        loader: DataLoader for validation data
-        device: Device to run validation on (cuda/cpu/mps)
-        criterion: Optional loss function. If provided, returns (accuracy, loss)
-        
-    Returns:
-        If criterion is None: accuracy (float)
-        If criterion is provided: (accuracy, loss) tuple
-    """
+
     model.eval()
     correct = 0
     total = 0
@@ -40,10 +28,5 @@ def validate(model, loader, device, criterion=None):
             if criterion is not None:
                 loss = criterion(outputs, labels)
                 val_loss += loss.item()
-    
-    accuracy = correct / total
-    
-    if criterion is None:
-        return accuracy
-    else:
-        return accuracy, val_loss / len(loader)
+                
+        return correct/total

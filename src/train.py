@@ -47,8 +47,8 @@ def train(model, train_loader, val_loader, criterion, optimizer, device, num_epo
     for epoch in range(num_epochs):
         print(f"Epoch {epoch+1}/{num_epochs}")
         train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device)
-        val_acc, val_loss = validate(model, validation_loader, device)
-        print(f"  Loss: {train_loss:.4f} | Val Acc: {val_acc:.4f} | Val Loss: {val_loss:.4f}")
+        val_acc = validate(model, validation_loader, device, criterion)
+        print(f" Val Acc: {val_acc:.4f}")
     
     print(f"Training completed!")
     return model
