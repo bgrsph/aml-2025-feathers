@@ -52,3 +52,5 @@ def train(model, train_loader, val_loader, criterion, optimizer, device, num_epo
     
     print(f"Training completed!")
     return model
+
+
