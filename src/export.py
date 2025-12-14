@@ -107,4 +107,4 @@ def export_model(
     })
 
     submission.to_csv(output_path, index=False)
-    print(f"✅ CNN submission saved to {output_path}")
+    print(f"✅ Model submission saved to {output_path}")
