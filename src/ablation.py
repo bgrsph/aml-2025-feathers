@@ -56,3 +56,84 @@ def run_ablation(models, transforms_dict, dataset_class, X_train, y_train, X_val
                 })
 
     return pd.DataFrame(results)
+
+
+def run_ablation_kfold(models, transforms_dict, dataset_class, 
+                       X_data, y_data,
+                       TRAIN_IMAGES_BASE_PATH, IMAGE_SIZE, device, 
+                       transform_base, num_classes, 
+                       k=5, seeds=[42, 123, 777], 
+                       epochs=15, batch_size=32, lr=0.001):
+    """
+    Run ablation study with k-fold cross validation.
+    
+    Args:
+        models: Dictionary of {model_name: model_class}
+        transforms_dict: Dictionary of {transform_name: transform}
+        dataset_class: Dataset class to use
+        X_data: ALL image paths (train + val combined)
+        y_data: ALL labels (train + val combined)
+        TRAIN_IMAGES_BASE_PATH: Base path for images
+        IMAGE_SIZE: Image size
+        device: torch.device
+        transform_base: Base transform (no augmentation) for validation
+        num_classes: Number of classes
+        k: Number of folds (default 5)
+        seeds: List of random seeds
+        epochs: Epochs per fold
+        batch_size: Batch size
+        lr: Learning rate
+    
+    Returns:
+        DataFrame with results including mean±std for each config
+    """
+    from validate import k_fold_cross_validate
+    
+    results = []
+    
+    for model_name, model_class in models.items():
+        for transform_name, transform in transforms_dict.items():
+            print(f"\n{'='*70}")
+            print(f"Running {model_name} + {transform_name} with {k}-Fold CV")
+            print(f"{'='*70}")
+            
+            for seed_idx, seed in enumerate(seeds):
+                torch.manual_seed(seed)
+                print(f"\n[Seed {seed_idx+1}/{len(seeds)}: {seed}]")
+                
+                # Run k-fold CV
+                kfold_results = k_fold_cross_validate(
+                    model_class=model_class,
+                    X_data=X_data,
+                    y_data=y_data,
+                    dataset_class=dataset_class,
+                    transform=transform,
+                    transform_base=transform_base,
+                    IMAGES_BASE_PATH=TRAIN_IMAGES_BASE_PATH,
+                    IMAGE_SIZE=IMAGE_SIZE,
+                    num_classes=num_classes,
+                    device=device,
+                    k=k,
+                    num_epochs=epochs,
+                    batch_size=batch_size,
+                    lr=lr,
+                    seed=seed,
+                    verbose=True
+                )
+                
+                # Store aggregated results
+                results.append({
+                    'model': model_name,
+                    'augmentation': transform_name,
+                    'seed': seed,
+                    'mean_val_acc': kfold_results['mean_accuracy'],
+                    'std_val_acc': kfold_results['std_accuracy'],
+                    'min_val_acc': min(kfold_results['all_fold_accuracies']),
+                    'max_val_acc': max(kfold_results['all_fold_accuracies']),
+                    'fold_accuracies': kfold_results['all_fold_accuracies'],
+                    'k_folds': k,
+                    'params': sum(p.numel() for p in 
+                                model_class(IMAGE_SIZE, num_classes).parameters())
+                })
+    
+    return pd.DataFrame(results)
