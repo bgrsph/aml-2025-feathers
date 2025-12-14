@@ -81,7 +81,7 @@ def export_model(
     all_preds = []
 
     with torch.no_grad():
-        for i in tqdm(range(0, len(image_paths), batch_size), desc="Exporting CNN"):
+        for i in tqdm(range(0, len(image_paths), batch_size), desc="Exporting model"):
             batch_paths = image_paths[i:i + batch_size]
 
             images = []
