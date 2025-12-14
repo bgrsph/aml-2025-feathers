@@ -5,6 +5,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from train import train_one_epoch
 from validate import validate
+from validate import k_fold_cross_validate
 
 
 def run_ablation(models, transforms_dict, dataset_class, X_train, y_train, X_val, y_val, 
@@ -64,30 +65,7 @@ def run_ablation_kfold(models, transforms_dict, dataset_class,
                        transform_base, num_classes, 
                        k=5, seeds=[42, 123, 777], 
                        epochs=15, batch_size=32, lr=0.001):
-    """
-    Run ablation study with k-fold cross validation.
-    
-    Args:
-        models: Dictionary of {model_name: model_class}
-        transforms_dict: Dictionary of {transform_name: transform}
-        dataset_class: Dataset class to use
-        X_data: ALL image paths (train + val combined)
-        y_data: ALL labels (train + val combined)
-        TRAIN_IMAGES_BASE_PATH: Base path for images
-        IMAGE_SIZE: Image size
-        device: torch.device
-        transform_base: Base transform (no augmentation) for validation
-        num_classes: Number of classes
-        k: Number of folds (default 5)
-        seeds: List of random seeds
-        epochs: Epochs per fold
-        batch_size: Batch size
-        lr: Learning rate
-    
-    Returns:
-        DataFrame with results including mean±std for each config
-    """
-    from validate import k_fold_cross_validate
+  
     
     results = []
     

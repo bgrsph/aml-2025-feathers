@@ -38,17 +38,46 @@ def train_one_epoch(model, loader, criterion, optimizer, device):
     return running_loss / len(loader.dataset)
 
 
-def train(model, train_loader, val_loader, criterion, optimizer, device, num_epochs):
-    print(f"Training model for {num_epochs} epochs...")
+def train(model, train_loader, val_loader, criterion, optimizer, device, num_epochs, patience=None):
+    """
+    Train the model with optional early stopping.
+    
+    Args:
+        patience (int, optional): Number of epochs to wait for improvement before stopping.
+                                  If None, no early stopping is applied.
+    """
+    print(f"Training model for {num_epochs} epochs {'with early stopping' if patience else ''}...")
     
     # Use train_loader for validation if val_loader is not provided
     validation_loader = val_loader if val_loader is not None else train_loader
+    
+    # Early stopping variables
+    best_val_acc = 0.0
+    patience_counter = 0
+    best_model_state = None
     
     for epoch in range(num_epochs):
         print(f"Epoch {epoch+1}/{num_epochs}")
         train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device)
         val_acc = validate(model, validation_loader, device, criterion)
         print(f" Val Acc: {val_acc:.4f}")
+        
+        # Early stopping logic
+        if patience is not None:
+            if val_acc > best_val_acc:
+                best_val_acc = val_acc
+                patience_counter = 0
+                best_model_state = model.state_dict().copy()
+            else:
+                patience_counter += 1
+                if patience_counter >= patience:
+                    print(f"Early stopping at epoch {epoch+1}")
+                    break
+    
+    # Restore best model if early stopping was used
+    if patience is not None and best_model_state is not None:
+        model.load_state_dict(best_model_state)
+        print(f"Restored best model (Val Acc: {best_val_acc:.4f})")
     
     print(f"Training completed!")
     return model
