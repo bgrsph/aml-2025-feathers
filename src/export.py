@@ -57,7 +57,7 @@ def export_hf(
     })
 
     submission.to_csv(output_path, index=False)
-    print(f"✅ HF submission saved to {output_path}")
+    print(f"HF submission saved to {output_path}")
 
 def export_model(
     model,
@@ -107,4 +107,4 @@ def export_model(
     })
 
     submission.to_csv(output_path, index=False)
-    print(f"✅ Model submission saved to {output_path}")
+    print(f"Model submission saved to {output_path}")
