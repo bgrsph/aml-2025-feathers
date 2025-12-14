@@ -1,26 +1,9 @@
-"""
-Generic training utilities for PyTorch models.
-Contains reusable training and validation functions.
-"""
-
 import torch
 from validate import validate
 
 
 def train_one_epoch(model, loader, criterion, optimizer, device):
-    """
-    Train the model for one epoch.
-    
-    Args:
-        model: PyTorch model to train
-        loader: DataLoader for training data
-        criterion: Loss function
-        optimizer: Optimizer
-        device: Device to train on (cuda/cpu/mps)
-        
-    Returns:
-        Average loss for the epoch
-    """
+
     model.train()
     running_loss = 0
 
@@ -39,13 +22,7 @@ def train_one_epoch(model, loader, criterion, optimizer, device):
 
 
 def train(model, train_loader, val_loader, criterion, optimizer, device, num_epochs, patience=None):
-    """
-    Train the model with optional early stopping.
-    
-    Args:
-        patience (int, optional): Number of epochs to wait for improvement before stopping.
-                                  If None, no early stopping is applied.
-    """
+
     print(f"Training model for {num_epochs} epochs {'with early stopping' if patience else ''}...")
     
     # Use train_loader for validation if val_loader is not provided

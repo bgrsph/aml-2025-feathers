@@ -18,10 +18,7 @@ def export_hf(
     output_path="submission.csv",
     kaggle_labels_start_at_1=True,
 ):
-    """
-    Export Kaggle submission for HuggingFace image classification models.
-    Based DIRECTLY on your working notebook code.
-    """
+
 
     model.to(device)
     model.eval()

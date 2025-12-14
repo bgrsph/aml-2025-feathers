@@ -1,7 +1,3 @@
-"""
-SimpleCNN-v1: First simple CNN model for ablation study
-"""
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

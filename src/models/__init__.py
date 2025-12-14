@@ -1,5 +1,3 @@
-# This file makes the models directory a Python package
-
 from .chicken_cnn import ChickenCNN
 from .simple_cnn_v1 import SimpleCNNv1
 from .simple_cnn_v2 import SimpleCNNv2

@@ -3,7 +3,6 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision.io import decode_image
 
 
-
 class FeatherImageDatasetHF(Dataset):
 
     def __init__(self, image_paths, image_labels=None, processor=None):

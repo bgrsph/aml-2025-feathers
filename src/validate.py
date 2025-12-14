@@ -1,8 +1,3 @@
-"""
-Unified validation utilities for PyTorch models.
-Provides flexible validation function that can optionally calculate loss.
-"""
-
 import torch
 
 
@@ -50,34 +45,7 @@ def k_fold_cross_validate(
     seed=42,
     verbose=True
 ):
-    """
-    Perform k-fold cross validation on a model.
-    
-    Args:
-        model_class: Model class (e.g., BirdyCNN)
-        X_data: Array/Series of all image paths (train+val combined)
-        y_data: Array/Series of all labels (train+val combined)
-        dataset_class: Your FeatherImageDataset class
-        transform: Training transforms (with augmentation)
-        transform_base: Validation transforms (without augmentation)
-        IMAGES_BASE_PATH: Base path for images
-        IMAGE_SIZE: Image size (e.g., 224)
-        num_classes: Number of classes (200)
-        device: torch.device
-        k: Number of folds
-        num_epochs: Epochs per fold
-        batch_size: Batch size
-        lr: Learning rate
-        seed: Random seed for fold splitting
-        verbose: Print progress
-        
-    Returns:
-        dict with keys:
-            - 'fold_results': list of dicts with per-fold metrics
-            - 'mean_accuracy': mean of best val accuracies
-            - 'std_accuracy': std of best val accuracies
-            - 'all_fold_accuracies': list of best accuracies per fold
-    """
+
     from sklearn.model_selection import KFold
     import torch.nn as nn
     import torch.optim as optim

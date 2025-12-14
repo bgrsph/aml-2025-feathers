@@ -1,14 +1,9 @@
-"""
-SimpleCNN-v2: Deeper CNN model for ablation study
-"""
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 
 class SimpleCNNv2(nn.Module):
-    """Deeper model with extra convolutional layer"""
     def __init__(self, image_size=224, num_classes=200):
         super().__init__()
         self.feature_size = 256 * (image_size // 16) ** 2  # 5 pools = /16
