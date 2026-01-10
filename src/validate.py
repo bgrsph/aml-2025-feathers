@@ -19,12 +19,19 @@ def validate(model, loader, device, criterion=None):
             correct += (preds == labels).sum().item()
             total += labels.size(0)
             
-            # # Calculate loss if criterion is provided
-            # if criterion is not None:
-            #     loss = criterion(outputs, labels)
-            #     val_loss += loss.item()
+            # Calculate loss if criterion is provided
+            if criterion is not None:
+                loss = criterion(outputs, labels)
+                val_loss += loss.item() * images.size(0)
 
-    return correct/total
+    accuracy = correct / total
+    
+    # Return both accuracy and loss
+    if criterion is not None:
+        avg_loss = val_loss / total
+        return accuracy, avg_loss
+    else:
+        return accuracy
 
 
 def k_fold_cross_validate(

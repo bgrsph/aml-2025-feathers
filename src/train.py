@@ -36,8 +36,15 @@ def train(model, train_loader, val_loader, criterion, optimizer, device, num_epo
     for epoch in range(num_epochs):
         print(f"Epoch {epoch+1}/{num_epochs}")
         train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device)
-        val_acc = validate(model, validation_loader, device, criterion)
-        print(f" Val Acc: {val_acc:.4f}")
+        
+        # Get both validation accuracy and loss
+        val_result = validate(model, validation_loader, device, criterion)
+        if isinstance(val_result, tuple):
+            val_acc, val_loss = val_result
+            print(f"  Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.4f}")
+        else:
+            val_acc = val_result
+            print(f"  Train Loss: {train_loss:.4f} | Val Acc: {val_acc:.4f}")
         
         # Early stopping logic
         if patience is not None:
